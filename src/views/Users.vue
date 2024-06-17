@@ -12,17 +12,17 @@ const {
 const { result, error, loading } = useQuery(
   gql`
       query {
-        users {
+        allUsers {
+          firstName,
           username,
-          email,
-
+          email
         }
       }
     `,
 );
 
 const users = computed(() => {
-  return result.value?.users || []; // Handle potential nullish values
+  return result.value?.users || [];
 });
 
 </script>
@@ -32,7 +32,6 @@ const users = computed(() => {
     <h3 class="text-3xl font-medium text-gray-700">
       Tables
     </h3>
-
 
     <div class="mt-8">
       <h4 class="text-gray-600">

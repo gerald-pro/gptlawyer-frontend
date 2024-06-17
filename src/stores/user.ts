@@ -6,11 +6,11 @@ interface UserState {
     user: string | null;
 }
 
-// Define la estructura del usuario (ajusta según sea necesario)
+
 interface User {
-    // Agrega los campos de usuario necesarios, por ejemplo:
+
     id: number;
-    name: string;
+    firstName: string;
     email: string;
 }
 
@@ -21,7 +21,7 @@ export const useUserStore = defineStore({
         user: localStorage.getItem("user") || null,
     }),
     getters: {
-        getToken: (state) => state.token,
+        getToken: (state) => {console.log(state.token); return state.token},
         getUser: (state: UserState): User | null => {
             return state.user ? JSON.parse(state.user) : null;
           },

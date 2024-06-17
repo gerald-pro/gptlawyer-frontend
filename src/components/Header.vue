@@ -1,14 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useSidebar } from '../composables/useSidebar'
-import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 
 const dropdownOpen = ref(false)
 const { isOpen } = useSidebar()
-
 const userStore = useUserStore();
-const router = useRouter();
 
 const logout = () => {
   userStore.removeToken();
@@ -69,7 +66,7 @@ const logout = () => {
             <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">Profile</a>
             <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">Products</a>
             <router-link  @click="logout" to="/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">
-              Log out
+              Cerrar sesión
             </router-link>
           </div>
         </transition>

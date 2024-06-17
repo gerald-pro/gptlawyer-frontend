@@ -57,13 +57,13 @@ const userSignIn = async () => {
         <label class="block">
           <span class="text-sm text-gray-700">Usuario</span>
           <input v-model="signInDetails.username" type="test"
-            class="block w-full mt-1 border-gray-200 rounded-md focus:border-indigo-600 focus:ring focus:ring-opacity-40 focus:ring-indigo-500">
+            class="block p-2 border border-gray-400 w-full mt-1 rounded-md focus:border-indigo-600 focus:ring focus:ring-opacity-40 focus:ring-indigo-500">
         </label>
 
         <label class="block mt-3">
           <span class="text-sm text-gray-700">Contraseña</span>
           <input v-model="signInDetails.password" type="password"
-            class="block w-full mt-1 border-gray-200 rounded-md focus:border-indigo-600 focus:ring focus:ring-opacity-40 focus:ring-indigo-500">
+            class="block p-2 border border-gray-400 w-full mt-1 rounded-md focus:border-indigo-600 focus:ring focus:ring-opacity-40 focus:ring-indigo-500">
         </label>
 
         <div v-if="errorMessage" class="mt-3 text-red-500 text-sm">

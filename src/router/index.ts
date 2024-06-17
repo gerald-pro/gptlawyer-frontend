@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Login from '@/views/Login.vue'
 import SignUp from '@/views/SignUp.vue'
 import Dashboard from '@/views/Dashboard.vue'
+import StudyCases from '@/views/StudyCases.vue'
+import ShowStudyCase from '@/views/ShowStudyCase.vue'
 import Users from '@/views/Users.vue'
 import Forms from '@/views/Forms.vue'
 import Card from '@/views/Card.vue'
@@ -29,6 +31,18 @@ const router = createRouter({
       path: '/dashboard',
       name: 'Dashboard',
       component: Dashboard,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/study-cases',
+      name: 'StudyCases',
+      component: StudyCases,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/study-cases/:id',
+      name: 'StudyCase',
+      component: ShowStudyCase,
       meta: { requiresAuth: true },
     },
     {
