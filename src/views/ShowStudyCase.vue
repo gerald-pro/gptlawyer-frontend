@@ -1,27 +1,31 @@
 <script setup lang="ts">
-import { useQuery } from '@vue/apollo-composable';
-import { computed, onMounted, ref } from 'vue';
+import { useMutation, useQuery } from '@vue/apollo-composable';
+import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
+import DocumentsManager from '@/components/DocumentsManager.vue';
 import ConfirmDialog from 'primevue/confirmdialog';
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 import { GET_STUDY_CASE } from '@/graphql/queries/studyCaseQueries';
-import type { StudyCase } from '@/types/types';
-
+import type { StudyCase, UpdateStudyCaseInput } from '@/types/types';
+import { DELETE_STUDY_CASE, UPDATE_STUDY_CASE } from '@/graphql/mutations/studyCaseMutations';
+import StudyCaseDialog from '@/components/StudyCaseDialog.vue';
+import router from '@/router';
 
 const route = useRoute();
 const studyCaseId = ref(parseInt(route.params.id as string));
-const { result, loading, error } = useQuery(GET_STUDY_CASE, { studyCaseId });
+const { result, refetch } = useQuery(GET_STUDY_CASE, { id: studyCaseId.value });
 
-const docs = ref<Document[]>([]);
+const { mutate: deleteSCMutation } = useMutation(DELETE_STUDY_CASE);
+
+const updatedStudyCase = ref<UpdateStudyCaseInput>({ id: '', description: '' });
+
 const studyCase = computed<StudyCase>(() => {
-    console.log(docs.value);
-    docs.value = result.value?.studyCase.documentSet; return result.value?.studyCase || []
+    updatedStudyCase.value = { ...result.value?.studyCase };
+    return result.value?.studyCase || []
 });
 
-const searchDoc = ref('');
+const { mutate: updateSCMutation } = useMutation(UPDATE_STUDY_CASE);
 
 const formatDate = (value: any) => {
     return new Date(value).toLocaleDateString('es-BO', {
@@ -36,31 +40,55 @@ const formatDate = (value: any) => {
 const confirm = useConfirm();
 const toast = useToast();
 
-const visibleUploadDialog = ref(false);
-const visibleEditDialog = ref(false);
-
-const openUlpoadDialog = () => {
-    visibleUploadDialog.value = true;
-}
-
-const closeUlpoadDialog = () => {
-    visibleUploadDialog.value = false;
-}
+const visibleUpdateDialog = ref(false);
 
 
-const onAdvancedUpload = () => {
-    toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
+const closeUpdateStudyCaseDialog = () => {
+    visibleUpdateDialog.value = false;
 };
+
+const handleUpdateStudyCase = async () => {
+    try {
+        await updateSCMutation({ ...updatedStudyCase.value });
+        refetch();
+        toast.add({ severity: 'success', summary: 'Actualizado', detail: 'Caso de estudio actualizado correctamente', life: 3000 });
+        closeUpdateStudyCaseDialog();
+    } catch (error) {
+        toast.add({ severity: 'error', summary: 'Error', detail: error, life: 5000 });
+    }
+};
+
+const handleDeleteStudyCase = () => {
+    confirm.require({
+        message: '¿Estás seguro? Esta acción es irreversible',
+        header: 'Eliminar',
+        rejectProps: { label: 'Cancelar', severity: 'secondary', outlined: true },
+        acceptProps: { label: 'Eliminar', severity: 'danger' },
+        accept: async () => {
+            try {
+                await deleteSCMutation({ id: studyCaseId.value });
+                router.push({ name: "StudyCases" });
+            } catch (error) {
+                toast.add({ severity: 'error', summary: 'Error', detail: error, life: 5000 });
+            }
+        }
+    });
+};
+
+
 </script>
 
 <template>
     <div>
+        <Toast />
+        <ConfirmDialog />
+
         <div class=" bg-white shadow-lg rounded-lg overflow-hidden">
             <div class="px-6 py-3">
 
                 <div class="flex justify-between text-gray-700">
                     <div>
-                        <h1 class="text-xl font-bold ">{{ studyCase.title }}</h1>
+                        <h1 class="text-lg font-bold  uppercase">{{ studyCase.title }}</h1>
                         <p class="font-medium ">Caso de estudio</p>
                     </div>
                     <div class="my-auto space-x-4">
@@ -68,22 +96,27 @@ const onAdvancedUpload = () => {
                             <font-awesome-icon icon="user-plus" />
                         </button>
 
-                        <button label="Editar" outlined>
+                        <button label="Editar" outlined @click="visibleUpdateDialog = true">
                             <font-awesome-icon icon="pen" />
                         </button>
 
-                        <button label="Eliminar" outlined>
+                        <button label="Eliminar" outlined @click="handleDeleteStudyCase">
                             <font-awesome-icon icon="trash" />
                         </button>
                     </div>
                 </div>
-                <div class="flex justify-left">
+                <div class="flex justify-between">
+                    <div>
+                        <p class="text-sm text-gray-600">{{ studyCase.description }}</p>
+                    </div>
                     <div>
                         <p class="text-sm text-gray-600">Creado: {{ formatDate(studyCase.createdAt) }}</p>
                     </div>
                 </div>
             </div>
 
+            <StudyCaseDialog v-model:visible="visibleUpdateDialog" :studyCase="updatedStudyCase"
+                @save="handleUpdateStudyCase" header="Editar caso de estudio" @close="closeUpdateStudyCaseDialog" />
         </div>
         <div class="pt-4 shadow-lg rounded-lg">
             <Tabs value="0">
@@ -128,66 +161,11 @@ const onAdvancedUpload = () => {
                             </p>
                         </TabPanel>
                         <TabPanel value="2">
-                            <DataTable :value="docs" stripedRows removableSort size="small" paginator :rows="10"
-                                :loading="loading"
-                                paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
-                                :globalFilterFields="['title', 'description']"
-                                currentPageReportTemplate="{first} a {last} de {totalRecords} registros">
-                                <template #loading> Cargando datos... </template>
-                                <template #header>
-                                    <div class="flex flex-wrap items-center justify-between gap-2 -mt-1 mb-3">
-                                        <div class="relative flex flex-wrap items-stretch">
-                                            <span
-                                                class="flex items-center whitespace-nowrap rounded-s border border-e-0 border-solid border-gray-400 px-3 py-[0.25rem] text-center text-base font-normal leading-[1.6] text-surface"
-                                                id="basic-addon1">
-                                                <font-awesome-icon icon="search" />
-                                            </span>
-                                            <input type="text"
-                                                class="border p-1 border-gray-400 relative m-0 block flex-auto rounded-e"
-                                                placeholder="buscar..." v-model="searchDoc">
-                                        </div>
-                                        <div class="flex flex-wrap space-x-4">
-                                            <button @click="visibleUploadDialog = true"
-                                                class="px-4 py-1 font-medium text-indigo-600  rounded hover:bg-gray-200 focus:outline-none border border-indigo-400"><font-awesome-icon
-                                                    icon="upload" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                </template>
-                                <Column field="id" header="#"></Column>
-                                <Column field="name" header="Nombre" sortable></Column>
-                                <Column field="uploadedAt" header="Subido" sortable dataType="date">
-                                    <template #body="{ data }">
-                                        {{ formatDate(data.uploadedAt) }}
-                                    </template>
-                                </Column>
-                                <Column field="uploadedBy.username" header="Colaborador" sortable></Column>
-                                <Column header="Opciones">
-                                    <template #body="{ data }">
-                                        <div class="space-x-5">
-                                            <button label="Eliminar" outlined>
-                                                <font-awesome-icon icon="trash" />
-                                            </button>
-                                            <button label="Editar" outlined>
-                                                <font-awesome-icon icon="pen" />
-                                            </button>
-                                        </div>
-                                    </template>
-                                </Column>
-                            </DataTable>
+                            <DocumentsManager :studyCaseId="studyCaseId" />
                         </TabPanel>
                     </div>
                 </TabPanels>
             </Tabs>
         </div>
-
-        <Dialog v-model:visible="visibleUploadDialog" modal header="Subir archivos" :style="{ width: '25rem' }">
-            <FileUpload name="demo[]" url="/api/upload" @upload="onAdvancedUpload($event)" :multiple="true"
-                accept="image/*" :maxFileSize="1000000">
-                <template #empty>
-                    <span>Drag and drop files to here to upload.</span>
-                </template>
-            </FileUpload>
-        </Dialog>
     </div>
 </template>

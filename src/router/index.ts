@@ -8,7 +8,6 @@ import Users from '@/views/Users.vue'
 import Forms from '@/views/Forms.vue'
 import Card from '@/views/Card.vue'
 import Tables from '@/views/Tables.vue'
-import UIElements from '@/views/UIElements.vue'
 import Modal from '@/views/Modal.vue'
 import { useUserStore } from '@/stores/user'
 
@@ -16,7 +15,7 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
+      path: '/login',
       name: 'Login',
       component: Login,
       meta: { layout: 'empty', requiresAuth: false },
@@ -28,7 +27,7 @@ const router = createRouter({
       meta: { layout: 'empty', requiresAuth: false },
     },
     {
-      path: '/dashboard',
+      path: '/',
       name: 'Dashboard',
       component: Dashboard,
       meta: { requiresAuth: true },
@@ -67,12 +66,6 @@ const router = createRouter({
       path: '/tables',
       name: 'Tables',
       component: Tables,
-      meta: { requiresAuth: true },
-    },
-    {
-      path: '/ui-elements',
-      name: 'UIElements',
-      component: UIElements,
       meta: { requiresAuth: true },
     },
     {

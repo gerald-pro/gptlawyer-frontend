@@ -35,3 +35,20 @@ export const GET_DOCUMENT = gql`
     }
   }
 `;
+
+export const GET_DOCUMENTS_BY_STUDY_CASE = gql`
+  query ($id: Int!) {
+    documentsByStudyCase(studyCaseId: $id) {
+      id
+      name
+      content
+      contentType
+      file
+      uploadedAt
+      uploadedBy {
+        id
+        username
+      }
+    }
+  }
+`;

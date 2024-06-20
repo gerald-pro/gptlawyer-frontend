@@ -13,7 +13,7 @@ const { result, error, loading } = useQuery(
   gql`
       query {
         allUsers {
-          firstName,
+          name,
           username,
           email
         }
@@ -22,7 +22,7 @@ const { result, error, loading } = useQuery(
 );
 
 const users = computed(() => {
-  return result.value?.users || [];
+  return result.value?.allUsers || [];
 });
 
 </script>
