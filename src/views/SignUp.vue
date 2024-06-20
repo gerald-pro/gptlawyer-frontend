@@ -7,22 +7,32 @@
 
       <form class="mt-4" @submit.prevent="userSignUp">
         <label class="block">
+          <span class="text-sm text-gray-700">Nombre</span>
+          <input v-model="signUpDetails.name" type="text"
+            class="p-2 border border-gray-400 block w-full mt-1 rounded-md focus:border-indigo-600 focus:ring focus:ring-opacity-40 focus:ring-indigo-500">
+        </label>
+
+        <label class="block">
           <span class="text-sm text-gray-700">Username</span>
           <input v-model="signUpDetails.username" type="text"
-            class="block w-full mt-1 border-gray-200 rounded-md focus:border-indigo-600 focus:ring focus:ring-opacity-40 focus:ring-indigo-500">
+            class="p-2 border border-gray-400 block w-full mt-1 rounded-md focus:border-indigo-600 focus:ring focus:ring-opacity-40 focus:ring-indigo-500">
         </label>
 
         <label class="block mt-3">
           <span class="text-sm text-gray-700">Email</span>
           <input v-model="signUpDetails.email" type="email"
-            class="block w-full mt-1 border-gray-200 rounded-md focus:border-indigo-600 focus:ring focus:ring-opacity-40 focus:ring-indigo-500">
+            class="p-2 border border-gray-400 block w-full mt-1 rounded-md focus:border-indigo-600 focus:ring focus:ring-opacity-40 focus:ring-indigo-500">
         </label>
 
         <label class="block mt-3">
           <span class="text-sm text-gray-700">Password</span>
           <input v-model="signUpDetails.password" type="password"
-            class="block w-full mt-1 border-gray-200 rounded-md focus:border-indigo-600 focus:ring focus:ring-opacity-40 focus:ring-indigo-500">
+            class="p-2 border border-gray-400 block w-full mt-1 rounded-md focus:border-indigo-600 focus:ring focus:ring-opacity-40 focus:ring-indigo-500">
         </label>
+
+        <div v-if="errorMessage" class="mt-3 text-red-500 text-sm">
+          {{ errorMessage }}
+        </div>
 
         <div class="mt-6">
           <button type="submit"
@@ -47,10 +57,12 @@ import { useUserStore } from '@/stores/user';
 import { useMutation } from '@vue/apollo-composable';
 import { USER_SIGNUP, USER_SIGNIN } from '@/mutations';
 import type { FetchResult } from '@apollo/client';
+import router from '@/router';
 
 const userStore = useUserStore();
 
 const signUpDetails = ref({
+  name: '',
   username: '',
   email: '',
   password: ''
@@ -58,27 +70,29 @@ const signUpDetails = ref({
 
 const { mutate: userSignUpMutation } = useMutation(USER_SIGNUP);
 const { mutate: userSignInMutation } = useMutation(USER_SIGNIN);
+const errorMessage = ref<string | null>(null);
 
 const userSignUp = async () => {
-  // Registrar usuario
-  await userSignUpMutation({
-    username: signUpDetails.value.username,
-    email: signUpDetails.value.email,
-    password: signUpDetails.value.password,
-  });
+  try {
+    console.log({ ...signUpDetails.value })
+    await userSignUpMutation({ ...signUpDetails.value });
 
-  // Iniciar sesión
-  const result: FetchResult<any, Record<string, any>, Record<string, any>> | null = await userSignInMutation({
-    username: signUpDetails.value.username,
-    password: signUpDetails.value.password,
-  });
+    // Iniciar sesión
+    const result: FetchResult<any, Record<string, any>, Record<string, any>> | null = await userSignInMutation({
+      username: signUpDetails.value.username,
+      password: signUpDetails.value.password,
+    });
 
 
-  if (result && result.data) {
-    userStore.setToken(result.data.tokenAuth.token);
-    userStore.setUser(result.data.tokenAuth.user);
-  } else {
-    console.error('No se pudo iniciar sesión o la respuesta no contiene los datos esperados.');
+    if (result && result.data) {
+      userStore.setToken(result.data.tokenAuth.token);
+      userStore.setUser(result.data.tokenAuth.user);
+      router.push('/');
+    } else {
+      errorMessage.value = 'No se pudo iniciar sesión o la respuesta no contiene los datos esperados.';
+    }
+  } catch (error: any) {
+    errorMessage.value = error;
   }
 };
 </script>

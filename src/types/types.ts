@@ -19,7 +19,7 @@ export interface ProfessionalProfile {
 
 // Interface for the study_cases table
 export interface StudyCase {
-    id: number;
+    id: string;
     title: string;
     description: string;
     createdAt: Date;
@@ -55,9 +55,8 @@ export interface Collaborator {
 export interface Document {
     id: number;
     name: string;
-    fileType: string | null;
-    content: string;
-    urlPath: string;
+    content?: string | null;
+    contentType?: string | null;
     studyCaseId: number; // Foreign key referencing study_cases(id)
 }
 

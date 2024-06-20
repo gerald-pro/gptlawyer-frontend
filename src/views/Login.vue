@@ -31,7 +31,7 @@ const userSignIn = async () => {
     if (result && result.data) {
       userStore.setToken(result.data.tokenAuth.token);
       userStore.setUser(result.data.tokenAuth.user);
-      router.push('/dashboard');
+      router.push('/');
     } else {
       console.error('No se pudo iniciar sesión o la respuesta no contiene los datos esperados.');
     }
