@@ -37,7 +37,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
     faUserSecret, faDashboard, faUsers, faTable, faSearch, faTrash, faPen, faUserPlus,
-    faRobot, faFile, faCircleInfo, faUpload
+    faRobot, faFile, faCircleInfo, faUpload,faArrowsRotate
 } from '@fortawesome/free-solid-svg-icons'
 import { apolloClient } from './apollo-config';
 
@@ -45,7 +45,7 @@ import { apolloClient } from './apollo-config';
 // Configuración de FontAwesome
 library.add(
     faUserSecret, faDashboard, faUsers, faTable, faSearch, faTrash,
-    faPen, faUserPlus, faRobot, faFile, faCircleInfo, faUpload
+    faPen, faUserPlus, faRobot, faFile, faCircleInfo, faUpload,faArrowsRotate
 )
 
 

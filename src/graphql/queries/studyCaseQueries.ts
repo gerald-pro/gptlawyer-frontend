@@ -22,6 +22,7 @@ export const GET_STUDY_CASE = gql`
       id
       title
       description
+      content
       createdAt
       numberOfCollaborators
       documentSet {
