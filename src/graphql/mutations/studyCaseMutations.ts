@@ -36,3 +36,10 @@ export const DELETE_STUDY_CASE = gql`
     }
   }
 `;
+export const PROCESS_STUDY_CASE = gql`
+  mutation ($id: ID!) {
+    processStudyCase(id: $id) {
+      success
+    }
+  }
+`;
