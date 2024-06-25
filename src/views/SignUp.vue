@@ -33,7 +33,9 @@
         <div v-if="errorMessage" class="mt-3 text-red-500 text-sm">
           {{ errorMessage }}
         </div>
-
+        <div v-if="showRecaptcha" class="w-full px-4 py-2 text-sm text-center">
+          <vue-recaptcha :sitekey="recaptchaSiteKey" @verify="recaptchaUpdated" hl="es"></vue-recaptcha>
+        </div>
         <div class="mt-6">
           <button type="submit"
             class="w-full px-4 py-2 text-sm text-center text-white bg-indigo-600 rounded-md focus:outline-none hover:bg-indigo-500">
@@ -108,6 +110,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import vueRecaptcha from 'vue3-recaptcha2';
 import { useUserStore } from '@/stores/user';
 import { useMutation } from '@vue/apollo-composable';
 import { USER_SIGNUP, USER_SIGNIN } from '@/mutations';
@@ -125,12 +128,21 @@ const signUpDetails = ref({
   password: ''
 });
 
+const showRecaptcha = ref(true);
+const recaptchaSiteKey = '6LfpKAEqAAAAAH-crcxCsoHJKsUaOABOg52f_TzO';
+const recaptcha = ref<string | null>(null);
+
 const { mutate: userSignUpMutation } = useMutation(USER_SIGNUP);
 const { mutate: userSignInMutation } = useMutation(USER_SIGNIN);
 const errorMessage = ref<string | null>(null);
 
 const userSignUp = async () => {
   try {
+    if (!recaptcha.value) {
+      errorMessage.value = 'Por favor, complete el reCAPTCHA.';
+      return;
+    }
+
     if (!acceptTerms.value) {
       errorMessage.value = "Debes aceptar los términos y condiciones para registrarte.";
       return;
@@ -155,5 +167,13 @@ const userSignUp = async () => {
   } catch (error: any) {
     errorMessage.value = error;
   }
+};
+
+const toggleRecaptcha = () => {
+  showRecaptcha.value = !showRecaptcha.value;
+};
+
+const recaptchaUpdated = (response: string) => {
+  recaptcha.value = response;
 };
 </script>
