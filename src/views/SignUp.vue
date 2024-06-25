@@ -62,45 +62,61 @@
   </div>
   <Dialog :style="{ width: '45rem' }" v-model:visible="visibleDialog" header="Terminos y condiciones">
     <div class="container mx-auto px-4">
-        <p class="text-gray-800">Bienvenido(a) al "Asistente Virtual Basado en Chatbot para el Estudio de Documentos
-          Jurídicos". Antes de proceder con la creación de su cuenta, por favor, lea atentamente los siguientes términos
-          y condiciones. Al hacer clic en "Acepto", usted reconoce que ha leído, entendido y acepta cumplir con estos
-          términos y condiciones.</p>
+      <p class="text-gray-800">Bienvenido(a) al "Asistente Virtual Basado en Chatbot para el Estudio de Documentos
+        Jurídicos". Antes de proceder con la creación de su cuenta, por favor, lea atentamente los siguientes términos
+        y condiciones. Al hacer clic en "Acepto", usted reconoce que ha leído, entendido y acepta cumplir con estos
+        términos y condiciones.</p>
 
-        <h3 class="mt-4 text-xl font-medium">Uso del Servicio:</h3>
-        <p class="text-gray-800">Usted acepta utilizar el asistente virtual únicamente para fines legales y éticos
-          relacionados con el análisis y estudio de documentos jurídicos en el contexto legal boliviano.</p>
+      <h3 class="mt-4 text-xl font-medium">Uso del Servicio:</h3>
+      <p class="text-gray-800">Usted acepta utilizar el asistente virtual únicamente para fines legales y éticos
+        relacionados con el análisis y estudio de documentos jurídicos en el contexto legal boliviano.</p>
 
-        <h3 class="mt-4 text-xl font-medium">Registro y Seguridad de la Cuenta:</h3>
-        <ul class="list-disc text-gray-800 pl-5">
-          <li>Usted es responsable de mantener la confidencialidad de su cuenta y contraseña, y de todas las actividades
-            que ocurran bajo su cuenta.</li>
-          <li>Usted se compromete a notificar de inmediato cualquier uso no autorizado de su cuenta.</li>
-        </ul>
+      <p class="text-gray-800">Usted se compromete a no utilizar el asistente virtual para cualquier propósito
+        ilegal o no autorizado, incluyendo pero no limitado a, violación de leyes de propiedad intelectual, envío de
+        spam,
+        acoso, y otras actividades prohibidas.</p>
 
-        <h3 class="mt-4 text-xl font-medium">Propiedad Intelectual:</h3>
-        <p class="text-gray-800">Todo el contenido, software y tecnología utilizados en el asistente virtual son
-          propiedad exclusiva de IA Empresarial y están protegidos por leyes de propiedad intelectual.</p>
+      <h3 class="mt-4 text-xl font-medium">Registro y Seguridad de la Cuenta:</h3>
+      <ul class="list-disc text-gray-800 pl-5">
+        <li>Usted es responsable de mantener la confidencialidad de su cuenta y contraseña, y de todas las actividades
+          que ocurran bajo su cuenta.</li>
+        <li>Usted es responsable de proporcionar información veraz y precisa durante el proceso de registro.
+          Cualquier información falsa puede resultar en la suspensión o terminación de su cuenta.</li>
+        <li>Usted se compromete a notificar de inmediato cualquier uso no autorizado de su cuenta.</li>
+      </ul>
 
-        <h3 class="mt-4 text-xl font-medium">Limitaciones de Responsabilidad:</h3>
-        <p class="text-gray-800">El uso del asistente virtual es bajo su propio riesgo. No garantizamos que el servicio
-          será ininterrumpido, oportuno, seguro o libre de errores. En ningún caso seremos responsables por daños directos, indirectos,
-          incidentales, especiales, consecuentes o ejemplares, incluyendo la pérdida de beneficios, datos o interrupción
-          del negocio.</p>
+      <h3 class="mt-4 text-xl font-medium">Propiedad Intelectual:</h3>
+      <p class="text-gray-800">Todo el contenido, software y tecnología utilizados en el asistente virtual,
+        incluyendo pero no limitado a, textos, gráficos, logotipos, íconos, imágenes, clips de audio,
+        descargas digitales y compilaciones de datos, son propiedad exclusiva de IA Empresarial o de sus proveedores de
+        contenido y están protegidos por leyes de propiedad intelectual nacionales e internacionales.
+      </p>
 
-        <h3 class="mt-4 text-xl font-medium">Privacidad y Protección de Datos:</h3>
-        <p class="text-gray-800">Su privacidad es importante para nosotros. Por favor, revise nuestra Política de
-          Privacidad para comprender cómo recopilamos, usamos y protegemos su información personal.</p>
+      <h3 class="mt-4 text-xl font-medium">Limitaciones de Responsabilidad:</h3>
+      <p class="text-gray-800">El uso del asistente virtual es bajo su propio riesgo. El servicio se proporciona "tal
+        cual" y "según disponibilidad".
+        No garantizamos que el servicio será ininterrumpido, oportuno, seguro o libre de errores. En ningún caso seremos
+        responsables por daños directos, indirectos,
+        incidentales, especiales, consecuentes o ejemplares, incluyendo la pérdida de beneficios, datos o interrupción
+        del negocio.</p>
 
-        <h3 class="mt-4 text-xl font-medium">Modificaciones del Servicio:</h3>
-        <p class="text-gray-800">Nos reservamos el derecho de modificar, suspender o discontinuar el servicio en
-          cualquier momento y sin previo aviso. No seremos responsables ante usted ni ante terceros por cualquier
-          modificación, suspensión o discontinuidad del servicio.</p>
+      <h3 class="mt-4 text-xl font-medium">Privacidad y Protección de Datos:</h3>
+      <p class="text-gray-800">Su privacidad es importante para nosotros. Por favor, revise nuestra Política de
+        Privacidad para comprender cómo recopilamos, usamos y protegemos su información personal.</p>
 
-        <h3 class="mt-4 text-xl font-medium">Cumplimiento Legal:</h3>
-        <p class="text-gray-800">Usted acepta cumplir con todas las leyes y regulaciones aplicables en relación con el
-          uso del asistente virtual.
-        </p>
+      <h3 class="mt-4 text-xl font-medium">Modificaciones del Servicio:</h3>
+      <p class="text-gray-800">Nos reservamos el derecho de modificar, suspender o discontinuar el servicio en
+        cualquier momento y sin previo aviso. No seremos responsables ante usted ni ante terceros por cualquier
+        modificación, suspensión o discontinuidad del servicio.</p>
+
+      <h3 class="mt-4 text-xl font-medium">Cumplimiento Legal:</h3>
+      <p class="text-gray-800">Usted acepta cumplir con todas las leyes y regulaciones aplicables en relación con el uso
+        del asistente virtual,
+        incluyendo pero no limitado a, leyes de privacidad, propiedad intelectual y seguridad de datos.
+      </p>
+      <p>Usted se compromete a indemnizarnos y mantenernos indemnes de cualquier reclamo, daño, pérdida o gasto
+        (incluidos los honorarios legales)
+        que surjan de su incumplimiento de estos términos y condiciones o de su uso del servicio.</p>
     </div>
   </Dialog>
 
