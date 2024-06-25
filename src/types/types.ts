@@ -22,8 +22,10 @@ export interface StudyCase {
     id: string;
     title: string;
     description: string;
+    content: string;
     createdAt: Date;
     userId: number;
+
 }
 
 export interface StudyCaseInput {
@@ -70,8 +72,9 @@ export interface Chat {
 export interface Message {
     id: number;
     content: string;
+    studyId: number;
+    type: number;
     createdAt: Date;
-    chatId: number; // Foreign key referencing chats(id)
 }
 
 // Interface for the invitations table

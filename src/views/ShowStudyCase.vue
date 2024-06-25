@@ -8,8 +8,9 @@ import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 import { GET_STUDY_CASE } from '@/graphql/queries/studyCaseQueries';
 import type { StudyCase, UpdateStudyCaseInput } from '@/types/types';
-import { PROCESS_STUDY_CASE,DELETE_STUDY_CASE, UPDATE_STUDY_CASE } from '@/graphql/mutations/studyCaseMutations';
+import { PROCESS_STUDY_CASE, DELETE_STUDY_CASE, UPDATE_STUDY_CASE } from '@/graphql/mutations/studyCaseMutations';
 import StudyCaseDialog from '@/components/StudyCaseDialog.vue';
+import ChatBox from '@/components/ChatBox.vue';
 import router from '@/router';
 
 const route = useRoute();
@@ -18,7 +19,7 @@ const studyCaseId = ref(parseInt(route.params.id as string));
 const { result, refetch } = useQuery(GET_STUDY_CASE, { id: studyCaseId.value });
 
 const { mutate: deleteSCMutation } = useMutation(DELETE_STUDY_CASE);
-const { mutate: processSCMutation } = useMutation(PROCESS_STUDY_CASE);
+const { mutate: processSCMutation, loading } = useMutation(PROCESS_STUDY_CASE);
 
 const updatedStudyCase = ref<UpdateStudyCaseInput>({ id: '', description: '' });
 
@@ -83,13 +84,11 @@ const handleProcessStudyCase = async () => {
         await processSCMutation({ id: studyCaseId.value });
         refetch();
         toast.add({ severity: 'success', summary: 'Procesado', detail: 'Caso de estudio procesado correctamente', life: 3000 });
-        
+
     } catch (error) {
         toast.add({ severity: 'error', summary: 'Error', detail: error as string, life: 5000 });
-    } 
+    }
 };
-
-
 
 </script>
 
@@ -107,14 +106,22 @@ const handleProcessStudyCase = async () => {
                         <p class="font-medium ">Caso de estudio</p>
                     </div>
                     <div class="my-auto space-x-4">
-                        <button label="refresh" outlined @click="handleProcessStudyCase">
-                           <font-awesome-icon icon="arrows-rotate" />
-                        </button>
+                        <button label="refresh" outlined @click="handleProcessStudyCase" :disabled="loading">
+                           
+                            <div v-if="!loading"><font-awesome-icon icon="arrows-rotate" /></div>
 
+                            <div v-else
+                                class="inline-block h-4 w-4 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                                role="status">
+                                <span
+                                    class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
+                            </div>
+                        </button>
+<!-- 
                         <button label="Editar" outlined>
                             <font-awesome-icon icon="user-plus" />
                         </button>
-
+ -->
                         <button label="Editar" outlined @click="visibleUpdateDialog = true">
                             <font-awesome-icon icon="pen" />
                         </button>
@@ -141,7 +148,7 @@ const handleProcessStudyCase = async () => {
             <Tabs value="0">
                 <TabList>
                     <div class="grid grid-cols-3 items-center justify-between w-full">
-                        
+
                         <Tab value="0">
                             <div class="-my-1"><font-awesome-icon icon="circle-info" class="px-2" />Contexto</div>
                         </Tab>
@@ -157,18 +164,12 @@ const handleProcessStudyCase = async () => {
                 <TabPanels>
                     <div class="min-h-80">
                         <TabPanel value="0">
-                           <div v-html="studyCase.content"></div>   
-                                            
+                            <div v-html="studyCase.content"></div>
+
                         </TabPanel>
                         <TabPanel value="1">
                             <p class="m-0">
-                                Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-                                laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi
-                                architecto beatae vitae dicta sunt explicabo. Nemo enim
-                                ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur
-                                magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit,
-                                sed
-                                quia non numquam eius modi.
+                                <ChatBox :studyCaseId="studyCaseId" />
                             </p>
                         </TabPanel>
                         <TabPanel value="2">

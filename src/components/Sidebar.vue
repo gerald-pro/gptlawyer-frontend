@@ -36,7 +36,7 @@ const inactiveClass = ref(
 
         <router-link class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4"
           :class="[$route.name == 'StudyCases' ? activeClass : inactiveClass]" to="/study-cases">
-          <font-awesome-icon icon="users" />
+          <font-awesome-icon icon="scale-balanced" />
           <span class="mx-4">Casos de estudio</span>
         </router-link>
 
@@ -46,36 +46,6 @@ const inactiveClass = ref(
           <span class="mx-4">Usuarios</span>
         </router-link>
 
-        <router-link class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4"
-          :class="[$route.name === 'Tables' ? activeClass : inactiveClass]" to="/tables">
-          <font-awesome-icon icon="table" />
-          <span class="mx-4">Tables</span>
-        </router-link>
-
-        <router-link class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4"
-          :class="[$route.name === 'Forms' ? activeClass : inactiveClass]" to="/forms">
-          <font-awesome-icon icon="table" />
-
-          <span class="mx-4">Forms</span>
-        </router-link>
-
-        <router-link class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4"
-          :class="[$route.name === 'Cards' ? activeClass : inactiveClass]" to="/cards">
-          <font-awesome-icon icon="table" />
-          <span class="mx-4">Cards</span>
-        </router-link>
-
-        <router-link class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4"
-          :class="[$route.name === 'Modal' ? activeClass : inactiveClass]" to="/modal">
-          <font-awesome-icon icon="table" />
-          <span class="mx-4">Modal</span>
-        </router-link>
-
-        <router-link class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4"
-          :class="[$route.name === 'Blank' ? activeClass : inactiveClass]" to="/blank">
-          <font-awesome-icon icon="table" />
-          <span class="mx-4">Blank</span>
-        </router-link>
       </nav>
     </div>
   </div>
