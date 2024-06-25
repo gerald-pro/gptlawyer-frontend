@@ -5,15 +5,11 @@ import EmptyLayout from './components/EmptyLayout.vue';
 
 // Importaciones de Vue y Apollo
 import { createApp, h, provide } from 'vue'
-import { ApolloClient, InMemoryCache } from '@apollo/client/core';
 import { DefaultApolloClient } from '@vue/apollo-composable';
-import { setContext } from '@apollo/client/link/context';
-import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 
 // Importaciones de enrutador y estado
 import router from './router';
 import { createPinia } from 'pinia';
-import { useUserStore } from './stores/user';
 
 // Importaciones de PrimeVue y sus servicios
 import PrimeVue from 'primevue/config';
@@ -31,13 +27,14 @@ import TabList from 'primevue/tablist';
 import Tab from 'primevue/tab';
 import FileUpload from 'primevue/fileupload';
 import Textarea from 'primevue/textarea';
+import ProgressSpinner from 'primevue/progressspinner';
 
 // Importaciones de FontAwesome
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
     faUserSecret, faDashboard, faUsers, faTable, faSearch, faTrash, faPen, faUserPlus,
-    faRobot, faFile, faCircleInfo, faUpload,faArrowsRotate
+    faRobot, faFile, faCircleInfo, faUpload,faArrowsRotate, faScaleBalanced
 } from '@fortawesome/free-solid-svg-icons'
 import { apolloClient } from './apollo-config';
 
@@ -45,7 +42,7 @@ import { apolloClient } from './apollo-config';
 // Configuración de FontAwesome
 library.add(
     faUserSecret, faDashboard, faUsers, faTable, faSearch, faTrash,
-    faPen, faUserPlus, faRobot, faFile, faCircleInfo, faUpload,faArrowsRotate
+    faPen, faUserPlus, faRobot, faFile, faCircleInfo, faUpload, faArrowsRotate, faScaleBalanced
 )
 
 
@@ -83,5 +80,6 @@ app.component('TabPanels', TabPanels)
     .component('DefaultLayout', DashboardLayout)
     .component('EmptyLayout', EmptyLayout)
     .component("font-awesome-icon", FontAwesomeIcon)
-
+    .component('ProgressSpinner', ProgressSpinner);
+    
 app.use(router).use(createPinia()).mount('#app');
