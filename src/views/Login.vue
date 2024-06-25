@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import vueRecaptcha from 'vue3-recaptcha2';
 import { useUserStore } from '@/stores/user';
 import { useMutation } from '@vue/apollo-composable';
 import { USER_SIGNIN } from '@/mutations';
 import type { FetchResult } from '@apollo/client';
 import { useRouter } from 'vue-router';
+
 
 const userStore = useUserStore();
 const router = useRouter();
@@ -16,6 +18,11 @@ const signInDetails = ref({
 
 const errorMessage = ref<string | null>(null);
 const isLoading = ref(false);
+
+const showRecaptcha = ref(true);
+const recaptchaSiteKey = '6LfpKAEqAAAAAH-crcxCsoHJKsUaOABOg52f_TzO';
+const recaptcha = ref<string | null>(null);
+
 const { mutate: userSignInMutation } = useMutation(USER_SIGNIN);
 
 const userSignIn = async () => {
@@ -23,6 +30,11 @@ const userSignIn = async () => {
   isLoading.value = true;
 
   try {
+    if (!recaptcha.value) {
+      errorMessage.value = 'Por favor, complete el reCAPTCHA.';
+      isLoading.value = false;
+      return;
+    }
     const result: FetchResult<any, Record<string, any>, Record<string, any>> | null = await userSignInMutation({
       username: signInDetails.value.username,
       password: signInDetails.value.password,
@@ -42,6 +54,14 @@ const userSignIn = async () => {
     isLoading.value = false; // Stop loading
   }
 
+};
+
+const toggleRecaptcha = () => {
+  showRecaptcha.value = !showRecaptcha.value;
+};
+
+const recaptchaUpdated = (response: string) => {
+  recaptcha.value = response;
 };
 </script>
 
@@ -79,9 +99,15 @@ const userSignIn = async () => {
             </label>
           </div>
 
+        
+
           <div>
             <a class="block text-sm text-indigo-700 fontme hover:underline" href="#">Forgot your password?</a>
           </div>
+        </div>
+
+        <div v-if="showRecaptcha" class="w-full px-4 py-2 text-sm text-center">
+          <vue-recaptcha :sitekey="recaptchaSiteKey" @verify="recaptchaUpdated" hl="es"></vue-recaptcha>
         </div>
 
         <div class="mt-6">
